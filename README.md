@@ -2,6 +2,12 @@
 
 A single-page weekend practice aid: timer, fast attempts, optional bowl photos and manual volume estimates, child-led cue logging, calm feedback, history, and a short parent guide.
 
+## Project documents
+
+- [Roadmap and milestone gates](docs/ROADMAP.md)
+- [Verification evidence and remaining checks](docs/VERIFICATION.md)
+- Live app: https://potty-weekend.netlify.app/
+
 ## Run and deploy
 
 No dependencies or build step. Serve `public/` over HTTP (e.g. `python3 -m http.server 8080 --directory public`). `npm test` and `npm run check` run the core checks. On Netlify import this GitHub repository with no build command; `netlify.toml` sets publish directory `public`. HTTPS enables normal phone camera picker behavior. Alternatively drag `public/` into Netlify Drop.
