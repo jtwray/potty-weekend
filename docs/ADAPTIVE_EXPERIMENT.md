@@ -4,7 +4,7 @@ Tucker authorized building a small removable experiment on October 6, 2026: “s
 
 ## Behavior
 
-Opt in with **Experimental reminder suggestions**. Parent chooses an interval; no automatic changes. Choices are current interval and 10 minutes shorter/longer, bounded to 20–120 minutes. Today’s logs produce an explanation:
+Opt in with **Experimental reminder suggestions**. Parent chooses an interval; no automatic changes. After a choice, the same event does not repeatedly recommend another adjustment; the next observation enables a new suggestion. Choices are current interval and 10 minutes shorter/longer, bounded to 20–120 minutes. Today’s logs produce an explanation:
 
 - A known pee accident: highlight sooner.
 - No-output attempt after the elapsed pee gap reaches the selected interval: highlight sooner.
