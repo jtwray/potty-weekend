@@ -40,7 +40,7 @@ export async function mountApp(storage) {
   for(const a of attempts){
    const item=document.createElement('article');item.className='history-item';
    const title=document.createElement('b');title.textContent=labels[a.outcome]+(a.outcome==='accident'&&a.accidentType&&a.accidentType!=='unknown'?` (${labels[a.accidentType]})`:'')+(a.volume!==null?` · ≈ ${a.volume} mL`:'');
-   const time=document.createElement('time');time.dateTime=new Date(a.at).toISOString();time.textContent=`${new Date(a.at).toLocaleString([], {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})} · Day ${a.day} · ${a.initiatedBy==='child'?'Child noticed':'Parent offered'}`;
+   const time=document.createElement('time');time.dateTime=new Date(a.at).toISOString();time.textContent=`${new Date(a.at).toLocaleString([], {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})} · Day ${a.day} · ${a.initiatedBy==='child'?'Child noticed':a.outcome==='accident'?'Parent noticed':'Parent offered'}`;
    item.append(title,document.createElement('br'),time);
    if(a.note){const p=document.createElement('p');p.textContent=a.note;item.append(p);}
    const actions=document.createElement('div');actions.className='history-actions';
@@ -48,8 +48,8 @@ export async function mountApp(storage) {
    const del=document.createElement('button');del.className='small';del.textContent='Delete';del.setAttribute('aria-label',`Delete ${labels[a.outcome]} from ${time.textContent}`);del.onclick=safe(async()=>{if(!confirm('Delete this attempt and its bowl photo?'))return;await storage.deleteAttempt(a.id);await render();});actions.append(del);item.append(actions);list.append(item);
   }
  }
- $('timer-toggle').onclick=safe(async()=>{const previous={...settings};if(settings.dueAt!==null){settings.remaining=Math.max(0,settings.dueAt-Date.now());settings.dueAt=null;}else{settings.dueAt=Date.now()+(settings.remaining>0?settings.remaining:settings.interval*60000);settings.remaining=null;reminderFired=false;}try{await persist();tick();}catch(e){settings=previous;throw e;}});
- $('snooze').onclick=safe(async()=>{const next={...settings,dueAt:Date.now()+600000,remaining:null};await storage.saveSettings(next);settings=next;reminderFired=false;tick();});
+ $('timer-toggle').onclick=safe(async()=>{const previous={...settings};if(settings.dueAt!==null){settings.remaining=Math.max(0,settings.dueAt-Date.now());settings.dueAt=null;}else{settings.dueAt=Date.now()+(settings.remaining>0?settings.remaining:settings.interval*60000);settings.remaining=null;reminderFired=false;}try{await persist();showAdvice();tick();}catch(e){settings=previous;throw e;}});
+ $('snooze').onclick=safe(async()=>{const next={...settings,dueAt:Date.now()+600000,remaining:null};await storage.saveSettings(next);settings=next;reminderFired=false;showAdvice();tick();});
  $('interval').onchange=safe(async()=>{const next={...settings,interval:Number($('interval').value),remaining:null};if(next.dueAt!==null)next.dueAt=Date.now()+next.interval*60000;await storage.saveSettings(next);settings=next;reminderFired=false;showAdvice();tick();});
  $('day').onchange=safe(async()=>{const next={...settings,day:$('day').value};await storage.saveSettings(next);settings=next;});
  $('sound').onchange=safe(async()=>{const next={...settings,sound:$('sound').checked};await storage.saveSettings(next);settings=next;if(settings.sound)sound();});

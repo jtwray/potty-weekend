@@ -10,7 +10,7 @@ export function validateAttempt(a) {
   return a;
 }
 export function summarize(attempts) {
-  const pees = attempts.filter(a => ['pee','both'].includes(a.outcome)).sort((a,b)=>a.at-b.at || (a.createdAt??0)-(b.createdAt??0));
+  const pees = attempts.filter(isObservedPee).sort((a,b)=>a.at-b.at || (a.createdAt??0)-(b.createdAt??0));
   // Same-day observations only. No overnight gaps, accidents of unknown type, or no-output attempts.
   const gaps = [];
   for (let i=1;i<pees.length;i++) {

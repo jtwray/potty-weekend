@@ -49,3 +49,7 @@ test('choices are bounded, unique, and future records are excluded',()=>{
  assert.deepEqual(reminderAdvice([],120,noon).choices,[110,120]);
  assert.equal(reminderAdvice([event(1,'pee',100)],60,noon).lastPee,undefined);
 });
+test('known pee accidents participate in observed spacing without inventing a volume',()=>{
+ const r=summarize([event(0,'pee',100),event(30,'accident',null,{accidentType:'pee'}),event(60,'accident',null,{accidentType:'poop'})]);
+ assert.equal(r.pees,2);assert.equal(r.gaps,1);assert.equal(r.median,30);assert.equal(r.measured,1);
+});
